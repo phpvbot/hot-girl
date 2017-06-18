@@ -17,7 +17,7 @@ class HotGirl extends AbstractMessageHandler
 
     public $version = '1.0';
 
-    public $name = 'hot-girl';
+    public $name = 'hot_girl';
 
     public $zhName = '辣妹图';
 
