@@ -36,7 +36,7 @@ class HotGirl extends AbstractMessageHandler
     {
         if ($message['type'] === 'text' && $message['pure'] == '妹子') {
 
-            $crawler = ! is_null(static::$crawler) ?: static::$crawler = new Crawler();
+            $crawler = static::$crawler ?: static::$crawler = new Crawler();
 
             $username = $message['from']['UserName'];
 
@@ -48,6 +48,7 @@ class HotGirl extends AbstractMessageHandler
                 $response = Http::request('GET', static::$target.'/mm/'.$number, static::$http_client_config);
 
                 # 解析页码获得文章内最大页数
+                $crawler->clear();
                 $crawler->addHtmlContent($response);
 
                 $page_links = $crawler->filter('#page>a');
