@@ -21,8 +21,6 @@ class HotGirl extends AbstractMessageHandler
 
     public $zhName = '辣妹图';
 
-    private static $prev_time = 0;
-
     private static $target = 'http://www.mmjpg.com';
 
     private static $http_client_config = [
@@ -38,13 +36,6 @@ class HotGirl extends AbstractMessageHandler
         if ($message['type'] === 'text' && $message['pure'] == '妹子') {
 
             $username = $message['from']['UserName'];
-            $now = time();
-
-            if ($now - static::$prev_time >= 10) {
-                static::$prev_time = $now;
-            } else {
-                return Text::send($username, '少年，要懂得节制，10 秒一次不要贪。');
-            }
 
             // 随机 1 至当前此此站点文章最大 ID
             $number = random_int(1, 1015);
