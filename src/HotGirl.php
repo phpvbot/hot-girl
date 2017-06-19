@@ -23,7 +23,7 @@ class HotGirl extends AbstractMessageHandler
 
     private static $target = 'http://www.mmjpg.com';
 
-    private static $http_client_config = [
+    private static $http_config = [
         'timeout' => 5.0,
         'headers' => [
             'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36',
@@ -45,7 +45,7 @@ class HotGirl extends AbstractMessageHandler
 
             try {
                 # 获取随机 ID 数据
-                $response = Http::request('GET', static::$target.'/mm/'.$number, static::$http_client_config);
+                $response = Http::request('GET', static::$target.'/mm/'.$number, static::$http_config);
 
                 # 解析页码获得文章内最大页数
                 $crawler->clear();
@@ -57,7 +57,7 @@ class HotGirl extends AbstractMessageHandler
 
                 # 获取随机 ID 中随机页数据
                 $uri = static::$target.'/mm/'.$number.'/'.random_int(1, $last_page);
-                $response = Http::request('GET', $uri, static::$http_client_config);
+                $response = Http::request('GET', $uri, static::$http_config);
 
                 # 解析页码获得文章内大图地址
                 $crawler->clear();
@@ -65,8 +65,8 @@ class HotGirl extends AbstractMessageHandler
 
                 $image_src = $crawler->filter('#content>a>img')->attr('src');
 
-                $response = Http::request('GET', $image_src, static::$http_client_config);
-
+                $response = Http::request('GET', $image_src, static::$http_config);
+                
                 # 存储图片至本地
                 $file_path = vbot('config')['user_path'].'girls/'.md5($image_src).'.jpg';
                 File::saveTo($file_path, $response);
