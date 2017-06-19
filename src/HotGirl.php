@@ -28,12 +28,15 @@ class HotGirl extends AbstractMessageHandler
         'headers' => [
             'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36',
         ],
-        'debug'   => true,
     ];
+
+    private static $crawler = null;
 
     public function handler(Collection $message)
     {
         if ($message['type'] === 'text' && $message['pure'] == '妹子') {
+
+            $crawler = ! is_null(static::$crawler) ?: static::$crawler = new Crawler();
 
             $username = $message['from']['UserName'];
 
@@ -45,7 +48,7 @@ class HotGirl extends AbstractMessageHandler
                 $response = Http::request('GET', static::$target.'/mm/'.$number, static::$http_client_config);
 
                 # 解析页码获得文章内最大页数
-                $crawler = new Crawler($response);
+                $crawler->addHtmlContent($response);
 
                 $page_links = $crawler->filter('#page>a');
 
@@ -55,7 +58,9 @@ class HotGirl extends AbstractMessageHandler
                 $uri = static::$target.'/mm/'.$number.'/'.random_int(1, $last_page);
                 $response = Http::request('GET', $uri, static::$http_client_config);
 
-                $crawler = new Crawler($response);
+                # 解析页码获得文章内大图地址
+                $crawler->clear();
+                $crawler->addHtmlContent($response);
 
                 $image_src = $crawler->filter('#content>a>img')->attr('src');
 
@@ -69,7 +74,7 @@ class HotGirl extends AbstractMessageHandler
             } catch (\Exception $e) {
                 vbot('console')->log($e->getMessage(), Console::ERROR);
 
-                return Text::send($username, '暂时无法提供服务，你，党之栋梁、国之人才，注意身体，千万！');
+                return Text::send($username, '暂时无法为您提供服务！');
             }
         }
     }
