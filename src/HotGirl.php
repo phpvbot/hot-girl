@@ -3,14 +3,13 @@
 namespace Vbot\HotGirl;
 
 use Vbot\Http\Http;
-use Hanson\Vbot\Console\Console;
-use Hanson\Vbot\Message\Image;
 use Hanson\Vbot\Message\Text;
 use Hanson\Vbot\Support\File;
+use Hanson\Vbot\Message\Image;
+use Hanson\Vbot\Console\Console;
 use Illuminate\Support\Collection;
 use Symfony\Component\DomCrawler\Crawler;
 use Hanson\Vbot\Extension\AbstractMessageHandler;
-
 
 class HotGirl extends AbstractMessageHandler
 {
@@ -62,7 +61,8 @@ class HotGirl extends AbstractMessageHandler
                 $last_page = (int) $page_links->eq($page_links->count() - 2)->html();
 
                 # 获取随机 ID 中随机页数据
-                $response = Http::request('GET', static::$target.'/mm/'.$number.'/'.random_int(1, $last_page), static::$http_client_config);
+                $uri = static::$target.'/mm/'.$number.'/'.random_int(1, $last_page);
+                $response = Http::request('GET', $uri, static::$http_client_config);
 
                 $crawler = new Crawler($response);
 
