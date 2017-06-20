@@ -30,13 +30,14 @@ class HotGirl extends AbstractMessageHandler
         ],
     ];
 
+    /**
+     * @var null|\Symfony\Component\DomCrawler\Crawler
+     */
     private static $crawler = null;
 
     public function handler(Collection $message)
     {
         if ($message['type'] === 'text' && $message['pure'] == '妹子') {
-
-            $crawler = static::$crawler ?: static::$crawler = new Crawler();
 
             $username = $message['from']['UserName'];
 
@@ -48,10 +49,10 @@ class HotGirl extends AbstractMessageHandler
                 $response = Http::request('GET', static::$target.'/mm/'.$number, static::$http_config);
 
                 # 解析页码获得文章内最大页数
-                $crawler->clear();
-                $crawler->addHtmlContent($response);
+                static::$crawler->clear();
+                static::$crawler->addHtmlContent($response);
 
-                $page_links = $crawler->filter('#page>a');
+                $page_links = static::$crawler->filter('#page>a');
 
                 $last_page = (int) $page_links->eq($page_links->count() - 2)->html();
 
@@ -60,13 +61,13 @@ class HotGirl extends AbstractMessageHandler
                 $response = Http::request('GET', $uri, static::$http_config);
 
                 # 解析页码获得文章内大图地址
-                $crawler->clear();
-                $crawler->addHtmlContent($response);
+                static::$crawler->clear();
+                static::$crawler->addHtmlContent($response);
 
-                $image_src = $crawler->filter('#content>a>img')->attr('src');
+                $image_src = static::$crawler->filter('#content>a>img')->attr('src');
 
                 $response = Http::request('GET', $image_src, static::$http_config);
-                
+
                 # 存储图片至本地
                 $file_path = vbot('config')['user_path'].'girls/'.md5($image_src).'.jpg';
                 File::saveTo($file_path, $response);
@@ -85,5 +86,6 @@ class HotGirl extends AbstractMessageHandler
      */
     public function register()
     {
+        static::$crawler = new Crawler();
     }
 }
