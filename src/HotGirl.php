@@ -24,11 +24,13 @@ class HotGirl extends AbstractMessageHandler
     private static $target = 'http://www.mmjpg.com';
 
     private static $http_config = [
-        'timeout' => 5.0,
+        'timeout' => 8.0,
         'headers' => [
             'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36',
         ],
     ];
+
+    private static $extension_config = [];
 
     /**
      * @var null|\Symfony\Component\DomCrawler\Crawler
@@ -69,14 +71,14 @@ class HotGirl extends AbstractMessageHandler
                 $response = Http::request('GET', $image_src, static::$http_config);
 
                 # 存储图片至本地
-                $file_path = vbot('config')['user_path'].'girls/'.md5($image_src).'.jpg';
+                $file_path = static::$extension_config['image_path'].md5($image_src).'.jpg';
                 File::saveTo($file_path, $response);
 
                 return Image::send($username, $file_path);
             } catch (\Exception $e) {
                 vbot('console')->log($e->getMessage(), Console::ERROR);
 
-                return Text::send($username, '暂时无法为您提供服务！');
+                return Text::send($username, static::$extension_config['error_message']);
             }
         }
     }
@@ -87,5 +89,10 @@ class HotGirl extends AbstractMessageHandler
     public function register()
     {
         static::$crawler = new Crawler();
+
+        static::$extension_config = [
+            'image_path'    => static::$config['image_path'] ?? vbot('config')['user_path'].'girls/',
+            'error_message' => static::$config['error_message'] ?? '暂时无法为您提供服务！',
+        ];
     }
 }
