@@ -14,6 +14,7 @@
         }
     ],
     "require": {
+        "vbot/http":"^1.0",
         "symfony/dom-crawler": "^3.3",
         "symfony/css-selector": "^3.3"
     },
