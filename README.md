@@ -17,14 +17,14 @@ author: JaQuan
 
 ## 扩展配置
 
-```php
 * image_path - (可选)图片下载保存路径，默认值为项目微信用户目录下的 `girls` 目录内
 * error_message - (可选)服务异常时的提示，默认值为 `暂时无法为您提供服务`
 
+```php
 // 配置示范
 'hot_girl' => [
     'image_path'    => 'girls/',
-    'error_message' => '暂时无法为您提供服务',
+    'error_message' => '妹子生气了不想来了',
 ],
 ```
 
