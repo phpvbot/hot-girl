@@ -24,7 +24,7 @@ class HotGirl extends AbstractMessageHandler
     private static $target = 'http://www.mmjpg.com';
 
     private static $http_config = [
-        'timeout' => 8.0,
+        'timeout' => 10.0,
         'headers' => [
             'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36',
         ],
