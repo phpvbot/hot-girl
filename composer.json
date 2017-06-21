@@ -14,12 +14,12 @@
         }
     ],
     "require": {
-        "vbot/http":"^1.0",
-        "symfony/dom-crawler": "^3.3",
-        "symfony/css-selector": "^3.3"
+        "vbot/http":"~1.0",
+        "symfony/dom-crawler": "~3.0",
+        "symfony/css-selector": "~3.0"
     },
     "require-dev": {
-        "hanson/vbot": "^2.0.1"
+        "hanson/vbot": "~2.0"
     },
     "autoload": {
         "psr-4": {
