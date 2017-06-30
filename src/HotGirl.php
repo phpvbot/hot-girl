@@ -25,6 +25,8 @@ class HotGirl extends AbstractMessageHandler
         Http::class,
     ];
 
+    public static $status = true;
+
     private static $target = 'http://www.mmjpg.com';
 
     private static $http_config = [
