@@ -15,7 +15,7 @@ class HotGirl extends AbstractMessageHandler
 {
     public $author = 'JaQuan';
 
-    public $version = '1.0';
+    public $version = '1.0.2';
 
     public $name = 'hot_girl';
 
@@ -34,8 +34,6 @@ class HotGirl extends AbstractMessageHandler
         ],
     ];
 
-    private static $extension_config = [];
-
     /**
      * @var null|\Symfony\Component\DomCrawler\Crawler
      */
@@ -43,12 +41,12 @@ class HotGirl extends AbstractMessageHandler
 
     public function handler(Collection $message)
     {
-        if ($message['type'] === 'text' && $message['pure'] == '妹子') {
+        if ($message['type'] === 'text' && $message['pure'] == $this->config['keyword']) {
 
             $username = $message['from']['UserName'];
 
             // 随机 1 至当前此此站点文章最大 ID
-            $number = random_int(1, 1015);
+            $number = random_int(1, 1054);
 
             try {
                 # 获取随机 ID 数据
@@ -75,14 +73,14 @@ class HotGirl extends AbstractMessageHandler
                 $response = Http::request('GET', $image_src, static::$http_config);
 
                 # 存储图片至本地
-                $file_path = static::$extension_config['image_path'].md5($image_src).'.jpg';
+                $file_path = $this->config['image_path'].md5($image_src).'.jpg';
                 File::saveTo($file_path, $response);
 
                 return Image::send($username, $file_path);
             } catch (\Exception $e) {
                 vbot('console')->log($e->getMessage(), Console::ERROR);
 
-                return Text::send($username, static::$extension_config['error_message']);
+                return Text::send($username, $this->config['error_message']);
             }
         }
     }
@@ -94,9 +92,12 @@ class HotGirl extends AbstractMessageHandler
     {
         static::$crawler = new Crawler();
 
-        static::$extension_config = [
-            'image_path'    => $this->config['image_path'] ?? vbot('config')['user_path'].'girls/',
-            'error_message' => $this->config['error_message'] ?? '暂时无法为您提供服务！',
+        $default_config = [
+            'keyword'       => '妹子',
+            'image_path'    => vbot('config')['user_path'].'girls/',
+            'error_message' => '暂时无法为您提供服务！',
         ];
+
+        $this->config = array_merge($default_config, $this->config);
     }
 }

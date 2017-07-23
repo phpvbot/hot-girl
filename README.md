@@ -23,6 +23,7 @@ author: JaQuan
 ```php
 // 配置示范
 'hot_girl' => [
+    'keyword'       => '妹子',
     'image_path'    => 'girls/',
     'error_message' => '妹子生气了不想来了',
 ],
