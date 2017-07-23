@@ -95,8 +95,8 @@ class HotGirl extends AbstractMessageHandler
         static::$crawler = new Crawler();
 
         static::$extension_config = [
-            'image_path'    => static::$config['image_path'] ?? vbot('config')['user_path'].'girls/',
-            'error_message' => static::$config['error_message'] ?? '暂时无法为您提供服务！',
+            'image_path'    => $this->config['image_path'] ?? vbot('config')['user_path'].'girls/',
+            'error_message' => $this->config['error_message'] ?? '暂时无法为您提供服务！',
         ];
     }
 }
