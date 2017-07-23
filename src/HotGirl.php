@@ -50,7 +50,7 @@ class HotGirl extends AbstractMessageHandler
             $username = $message['from']['UserName'];
 
             // 随机 1 至当前此此站点文章最大 ID
-            $number = random_int(1, 1014);
+            $number = random_int(1, 1054);
 
             try {
                 # 获取随机 ID 数据
