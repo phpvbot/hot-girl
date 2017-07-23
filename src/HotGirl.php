@@ -21,8 +21,6 @@ class HotGirl extends AbstractMessageHandler
 
     public $zhName = '辣妹图';
 
-    public $status = true;
-
     public $baseExtensions = [
         Http::class,
     ];
